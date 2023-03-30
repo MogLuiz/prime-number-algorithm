@@ -12,7 +12,7 @@ func main() {
 
 func isPrime(number int) (bool, string) {
 	if number == 0 || number == 1 {
-		return false, fmt.Sprintf("%d is not prime, by definition", number)
+		return false, fmt.Sprintf("%d is not prime, by definition!", number)
 	}
 
 	if number < 0 {
