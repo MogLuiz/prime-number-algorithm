@@ -2,24 +2,32 @@ package main
 
 import "testing"
 
+type IsPrimeTestTableSetup struct {
+	name     string
+	testNum  int
+	expected bool
+	msg      string
+}
+
 func Test_isPrime(t *testing.T) {
-	param := 0
-	result, msg := isPrime(param)
-	if result {
-		t.Errorf("with %d as test parameter, got true, but expected false", param)
+
+	primeTests := []IsPrimeTestTableSetup{
+		{name: "prime", testNum: 7, expected: true, msg: "7 is a prime number!"},
+		{name: "not prime", testNum: 8, expected: false, msg: "8 is not a prime number because it is divisible by 2!"},
 	}
 
-	if msg != "0 is not prime, by definition" {
-		t.Errorf("wrong message returned")
-	}
+	for _, entry := range primeTests {
+		result, msg := isPrime(entry.testNum)
+		if entry.expected && !result {
+			t.Errorf("%s: expected true, but got false", entry.name)
+		}
 
-	param = 7
-	result, msg = isPrime(param)
-	if !result {
-		t.Errorf("with %d as test parameter, got false, but expected true", param)
-	}
+		if !entry.expected && result {
+			t.Errorf("%s: expected false, but got true", entry.name)
+		}
 
-	if msg != "7 is a prime number!" {
-		t.Errorf("wrong message returned")
+		if entry.msg != msg {
+			t.Errorf("%s: expected %s but got %s", entry.name, entry.msg, msg)
+		}
 	}
 }
