@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"io"
+	"os"
+	"testing"
+)
 
 type IsPrimeTestTableSetup struct {
 	name     string
@@ -32,5 +36,31 @@ func Test_isPrime(t *testing.T) {
 		if entry.msg != msg {
 			t.Errorf("%s: expected %s but got %s", entry.name, entry.msg, msg)
 		}
+	}
+}
+
+func Test_prompt(t *testing.T) {
+	// save a copy of os.Stdout
+	oldOut := os.Stdout
+
+	// create a read and write pipe
+	read, write, _ := os.Pipe()
+
+	// set os.Stdout to our write pipe
+	os.Stdout = write
+
+	prompt()
+
+	// close our writer
+	_ = write.Close()
+
+	// reset os.Stdout to what is was before
+	os.Stdout = oldOut
+
+	// read the output of our propt() func from our read pipe
+	out, _ := io.ReadAll(read)
+
+	if string(out) != "-> " {
+		t.Errorf("incorrect propt: expected -> but got %s", string(out))
 	}
 }
